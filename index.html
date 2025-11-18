@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>教育社会学特講 2025 | J.F. Oberlin Univ.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Shippori+Mincho:wght@400;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans JP"', 'sans-serif'],
+                        serif: ['"Shippori Mincho"', 'serif'],
+                    },
+                    colors: {
+                        oberlin: {
+                            red: '#8B2635',
+                            dark: '#1A202C',
+                            light: '#F7FAFC',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #aaa; }
+        
+        .term-link {
+            color: #2563EB;
+            border-bottom: 1px dotted #2563EB;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        .term-link:hover {
+            background-color: #EFF6FF;
+            color: #1E40AF;
+        }
+
+        .page-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        .page-section.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hook Question Style */
+        .hook-box {
+            background-color: #fff;
+            border-left: 6px solid #8B2635;
+            padding: 1.5rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans h-screen flex overflow-hidden">
+
+    <aside class="w-64 bg-oberlin-dark text-white flex-shrink-0 flex flex-col shadow-xl">
+        <div class="p-6 border-b border-gray-700">
+            <h1 class="font-serif font-bold text-xl tracking-wider">Sociology of<br>Education</h1>
+            <p class="text-xs text-gray-400 mt-2">2025 Spring Module</p>
+        </div>
+        <nav class="flex-1 overflow-y-auto py-4">
+            <ul class="space-y-1">
+                <li>
+                    <button onclick="showPage('home')" class="nav-btn w-full text-left px-6 py-3 hover:bg-gray-700 focus:bg-oberlin-red transition flex items-center border-l-4 border-transparent focus:border-white" id="btn-home">
+                        <i class="fas fa-home w-6"></i> Top / Introduction
+                    </button>
+                </li>
+                <li class="pt-4 pb-2 px-6 text-xs font-bold text-gray-500 uppercase">Syllabus</li>
+                <li>
+                    <button onclick="showPage('week1')" class="nav-btn w-full text-left px-6 py-3 hover:bg-gray-700 focus:bg-oberlin-red transition flex items-center border-l-4 border-transparent focus:border-white" id="btn-week1">
+                        <i class="fas fa-layer-group w-6"></i> Week 1: Theory
+                    </button>
+                </li>
+                <li>
+                    <button onclick="showPage('week2')" class="nav-btn w-full text-left px-6 py-3 hover:bg-gray-700 focus:bg-oberlin-red transition flex items-center border-l-4 border-transparent focus:border-white" id="btn-week2">
+                        <i class="fas fa-chart-pie w-6"></i> Week 2: Application
+                    </button>
+                </li>
+                <li>
+                    <button onclick="showPage('week3')" class="nav-btn w-full text-left px-6 py-3 hover:bg-gray-700 focus:bg-oberlin-red transition flex items-center border-l-4 border-transparent focus:border-white" id="btn-week3">
+                        <i class="fas fa-fist-raised w-6"></i> Week 3: Critique
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="p-4 border-t border-gray-700 text-xs text-gray-400 text-center">
+            &copy; 2025 Ikko Tanaka, Ph.D.
+        </div>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto relative scroll-smooth">
+        
+        <div id="home" class="page-section active">
+            <div class="max-w-4xl mx-auto px-8 py-16">
+                <div class="mb-12 text-center">
+                    <span class="text-oberlin-red font-bold tracking-widest uppercase text-sm">Course Overview</span>
+                    <h2 class="text-4xl font-serif font-bold mt-4 mb-6 text-gray-900">教育格差、メリトクラシー、<br>そして社会正義</h2>
+                    <p class="text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto">
+                        本講義は、現代社会の亀裂である「教育格差」を、対立する理論的視座から解剖する集中講義である。<br>
+                        なぜ「努力」は報われないのか？ 学校は誰のためにあるのか？<br>
+                        3週間を通じて、その構造的要因を探求する。
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6 mb-16">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition cursor-pointer group" onclick="showPage('week1')">
+                        <div class="text-blue-600 text-2xl mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-balance-scale"></i></div>
+                        <h3 class="font-bold text-lg mb-2">Week 1: Theory</h3>
+                        <p class="text-sm text-gray-600">人的資本論 vs 再生産論。<br>教育社会学の二大潮流を理解し、メリトクラシーの光と影を学ぶ。</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition cursor-pointer group" onclick="showPage('week2')">
+                        <div class="text-yellow-600 text-2xl mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-search-dollar"></i></div>
+                        <h3 class="font-bold text-lg mb-2">Week 2: Application</h3>
+                        <p class="text-sm text-gray-600">市場原理とテスト。<br>具体的な政策（チャーター、統一試験）がいかに格差に作用するかを検証する。</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition cursor-pointer group" onclick="showPage('week3')">
+                        <div class="text-purple-600 text-2xl mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-lightbulb"></i></div>
+                        <h3 class="font-bold text-lg mb-2">Week 3: Critique</h3>
+                        <p class="text-sm text-gray-600">改革から再構築へ。<br>脱植民地化やアボリショニストなど、前提を覆すラディカルな思想に触れる。</p>
+                    </div>
+                </div>
+
+                <div class="bg-gray-100 rounded-lg p-6 border-l-4 border-gray-500">
+                    <h4 class="font-bold text-gray-700 mb-2"><i class="fas fa-info-circle mr-2"></i>本講義資料の使い方</h4>
+                    <p class="text-sm text-gray-600">
+                        本文中に現れる <span class="term-link" onclick="openGlossary('dummy')">青いリンクの用語</span> をクリックすると、右側に解説パネルが表示される。
+                        専門用語の定義を確認しながら読み進めること。
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="week1" class="page-section">
+            <header class="bg-blue-50 px-8 py-12 border-b border-blue-100">
+                <div class="max-w-4xl mx-auto">
+                    <span class="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full">Week 1</span>
+                    <h2 class="text-3xl font-serif font-bold mt-4 text-gray-900">理論的枠組みと歴史的背景<br>—— メリトクラシーの光と影</h2>
+                </div>
+            </header>
+            <div class="max-w-4xl mx-auto px-8 py-12">
+                
+                <div class="hook-box">
+                    <div class="flex items-center mb-2 text-oberlin-red font-bold">
+                        <i class="fas fa-question-circle mr-2"></i> Key Question
+                    </div>
+                    <p class="text-xl font-serif font-medium text-gray-800">
+                        学業の成功は、本当に「個人の努力」の賜物なのか？
+                    </p>
+                </div>
+
+                <section class="mb-16">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                        <span class="text-blue-500 mr-3">1.1</span> 機能主義と人的資本理論
+                    </h3>
+                    <p class="text-gray-700 leading-8 mb-4">
+                        まず、現在の教育政策の主流となっている考え方を検討する。これは
+                        <span class="term-link" onclick="openGlossary('hct')">人的資本理論 (Human Capital Theory)</span>
+                        と呼ばれ、シカゴ学派の経済学者Beckerらによって定式化されたものである。
+                    </p>
+                    <p class="text-gray-700 leading-8 mb-4">
+                        この理論において、教育は「消費」ではなく「投資」である。個人が教育を受けることでスキル（資本）を蓄積し、それが生産性を高め、結果として高い賃金をもたらすと説明される。つまり、
+                        <span class="term-link" onclick="openGlossary('meritocracy')">メリトクラシー (能力主義)</span>
+                        は機能しており、格差はあくまで「努力や投資の差」として正当化されるのである。
+                    </p>
+                </section>
+
+                <section class="mb-16">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                        <span class="text-red-500 mr-3">1.2</span> 紛争理論と社会的再生産
+                    </h3>
+                    <p class="text-gray-700 leading-8 mb-4">
+                        これに対し、社会学者は「学校は本当に中立か？」と問う。
+                        <span class="term-link" onclick="openGlossary('reproduction')">社会的再生産 (Social Reproduction)</span>
+                        の理論家たちは、学校が既存の不平等を維持・強化する装置だと批判する。
+                    </p>
+
+                    <div class="grid md:grid-cols-2 gap-6 mt-8">
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h4 class="font-bold text-lg mb-3">A. 構造的対応原理</h4>
+                            <p class="text-sm text-gray-600 mb-3">
+                                Bowles & Gintisは、学校の規律（チャイム、服従）が工場の労働環境と酷似していることを指摘した。これを
+                                <span class="term-link" onclick="openGlossary('correspondence')">対応原理 (Correspondence Principle)</span>
+                                と呼ぶ。学校は「賢い子」ではなく「従順な労働者」を育てているという批判である。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h4 class="font-bold text-lg mb-3">B. 文化資本論</h4>
+                            <p class="text-sm text-gray-600 mb-3">
+                                Pierre Bourdieuは、経済的な富だけでなく、
+                                <span class="term-link" onclick="openGlossary('cultural_capital')">文化資本 (Cultural Capital)</span>
+                                の重要性を説いた。家庭で身につく言葉遣いや趣味が、学校では「才能」として評価されるため、上流階級の子が自動的に有利になるメカニズムである。
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <p class="text-gray-700 leading-8 mt-6">
+                        ブルデューは、この不公平が見えないように隠されている状態を
+                        <span class="term-link" onclick="openGlossary('symbolic_violence')">象徴的暴力 (Symbolic Violence)</span>
+                        と呼んだ。「あの子は頭がいいから」という納得こそが、実は暴力なのである。
+                    </p>
+                </section>
+            </div>
+        </div>
+
+        <div id="week2" class="page-section">
+            <header class="bg-yellow-50 px-8 py-12 border-b border-yellow-100">
+                <div class="max-w-4xl mx-auto">
+                    <span class="bg-yellow-600 text-white text-xs font-bold px-3 py-1 rounded-full">Week 2</span>
+                    <h2 class="text-3xl font-serif font-bold mt-4 text-gray-900">具体的な事例研究・応用<br>—— 市場とテストの政治学</h2>
+                </div>
+            </header>
+            <div class="max-w-4xl mx-auto px-8 py-12">
+                
+                <div class="hook-box">
+                    <div class="flex items-center mb-2 text-oberlin-red font-bold">
+                        <i class="fas fa-question-circle mr-2"></i> Key Question
+                    </div>
+                    <p class="text-xl font-serif font-medium text-gray-800">
+                        「選択の自由」や「公正なテスト」は、本当に格差を是正するのか？
+                    </p>
+                </div>
+
+                <p class="text-lg text-gray-700 mb-8">
+                    第2週では、Week 1の理論を現代の具体的な争点に応用する。特に
+                    <span class="term-link" onclick="openGlossary('neoliberalism')">新自由主義 (Neoliberalism)</span>
+                    に基づく教育改革がもたらした結果を検証する。
+                </p>
+
+                <article class="bg-white border-l-4 border-yellow-500 shadow-sm p-8 mb-10 rounded-r-lg">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">2.1 学校選択制のパラドックス</h3>
+                    <p class="text-gray-700 mb-4">
+                        「親が学校を選べるようになれば、競争が生まれ教育の質が上がる」——これが
+                        <span class="term-link" onclick="openGlossary('school_choice')">学校選択制 (School Choice)</span>
+                        の謳い文句であった（チャータースクールなど）。
+                    </p>
+                    <p class="text-gray-700 mb-4">
+                        しかし、Frankenbergら (2011) の研究は、これが逆効果であったことを示している。
+                        <span class="term-link" onclick="openGlossary('info_asymmetry')">情報の非対称性</span>
+                        （高学歴な親ほど良い情報を得る）により、結果として人種や階層による
+                        <span class="term-link" onclick="openGlossary('segregation')">分離・隔離 (Segregation)</span>
+                        が進行してしまったのである。
+                    </p>
+                </article>
+
+                <article class="bg-white border-l-4 border-blue-500 shadow-sm p-8 mb-10 rounded-r-lg">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">2.2 標準化テストとバイアス</h3>
+                    <p class="text-gray-700 mb-4">
+                        入試やSATなどの
+                        <span class="term-link" onclick="openGlossary('standardized_test')">標準化テスト</span>
+                        は、公平なものさしとして導入された。しかし、テストスコアは
+                        <span class="term-link" onclick="openGlossary('ses')">社会経済的地位 (SES)</span>
+                        と強く相関する。
+                    </p>
+                    <p class="text-gray-700 mb-4">
+                        また、マイノリティの学生が「自分の集団は能力が低い」という偏見を意識してしまい、実力を発揮できなくなる
+                        <span class="term-link" onclick="openGlossary('stereotype_threat')">ステレオタイプ脅威</span>
+                        も問題視されている。
+                    </p>
+                    <div class="bg-blue-50 p-4 rounded text-sm text-blue-900">
+                        <strong>New Perspective:</strong> 最近では、居住地域の不利さを考慮してスコアを補正する
+                        <span class="term-link" onclick="openGlossary('spatial_eco')">空間計量経済学</span>
+                        の手法を用い、テストを「隠れた才能の発掘」に使おうとする動きもある。
+                    </div>
+                </article>
+            </div>
+        </div>
+
+        <div id="week3" class="page-section">
+            <header class="bg-purple-50 px-8 py-12 border-b border-purple-100">
+                <div class="max-w-4xl mx-auto">
+                    <span class="bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full">Week 3</span>
+                    <h2 class="text-3xl font-serif font-bold mt-4 text-gray-900">批判的検討と未来展望<br>—— 改革を超えて</h2>
+                </div>
+            </header>
+            <div class="max-w-4xl mx-auto px-8 py-12">
+
+                <div class="hook-box">
+                    <div class="flex items-center mb-2 text-oberlin-red font-bold">
+                        <i class="fas fa-question-circle mr-2"></i> Key Question
+                    </div>
+                    <p class="text-xl font-serif font-medium text-gray-800">
+                        君たちが学ぶ「正解」は、誰によって決められたのか？
+                    </p>
+                </div>
+
+                <p class="text-lg text-gray-700 mb-10">
+                    最終週では、既存システムの微修正（Reform）ではなく、システムの前提そのものを問い直す（Reimagine）思想に触れる。
+                </p>
+
+                <div class="space-y-12">
+                    <section>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">3.1 知の脱植民地化</h3>
+                        <p class="text-gray-700 leading-8 mb-4">
+                            大学で教えられている「正解」は、誰が作ったのであろうか。
+                            <span class="term-link" onclick="openGlossary('decolonization')">脱植民地化 (Decolonization)</span>
+                            運動は、カリキュラムが
+                            <span class="term-link" onclick="openGlossary('eurocentrism')">西洋中心主義 (Eurocentrism)</span>
+                            に基づいていることを批判し、排除されてきた知識や視点を復権させようとする試みである。多様性（Diversity）という言葉でお茶を濁すのではなく、知の構造そのものの変革を求めている。
+                        </p>
+                    </section>
+
+                    <section>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">3.2 アボリショニスト・ティーチング</h3>
+                        <p class="text-gray-700 leading-8 mb-4">
+                            Bettina Loveが提唱する
+                            <span class="term-link" onclick="openGlossary('abolitionist')">アボリショニスト・ティーチング</span>
+                            は、最も急進的な提言の一つである。彼女は、教育の目的を差別的な社会での「サバイバル（適応）」から、「自由（システムからの解放）」へと転換すべきだと説く。
+                        </p>
+                    </section>
+
+                    <section class="bg-gray-100 p-6 rounded-xl">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Critical Reflection: 批判的教育学への批判</h3>
+                        <p class="text-gray-700 mb-4">
+                            しかし、こうした
+                            <span class="term-link" onclick="openGlossary('critical_pedagogy')">批判的教育学</span>
+                            自体も、教師が生徒を「啓蒙してやる」という
+                            <span class="term-link" onclick="openGlossary('paternalism')">パターナリズム (温情主義)</span>
+                            に陥る危険性を孕んでいる。理想論と実践の間の緊張関係をどう保つかが、我々の課題である。
+                        </p>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <div id="glossary-drawer" class="fixed inset-y-0 right-0 w-80 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out z-50 flex flex-col border-l border-gray-200">
+        <div class="p-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+            <h3 class="font-bold text-gray-700"><i class="fas fa-book-reader mr-2"></i>用語解説</h3>
+            <button onclick="closeGlossary()" class="text-gray-400 hover:text-gray-700">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+        <div class="p-6 flex-1 overflow-y-auto" id="glossary-content">
+            <p class="text-gray-500 text-sm">本文中の青いリンクをクリックすると、ここに解説が表示される。</p>
+        </div>
+    </div>
+
+    <script>
+        // Page Navigation Logic
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page-section').forEach(el => {
+                el.classList.remove('active');
+            });
+            // Show target page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update Sidebar Active State
+            document.querySelectorAll('.nav-btn').forEach(el => {
+                el.classList.remove('bg-oberlin-red', 'border-white');
+                el.classList.add('border-transparent');
+            });
+            // Highlight current button logic could be added here
+            document.getElementById('btn-' + pageId).classList.remove('border-transparent');
+            document.getElementById('btn-' + pageId).classList.add('bg-gray-700', 'border-white');
+        }
+
+        // Glossary Data Dictionary
+        const glossaryData = {
+            'hct': {
+                title: '人的資本理論 (Human Capital Theory)',
+                desc: '教育を「消費」ではなく「投資」として捉える経済理論。ゲーリー・ベッカーらが提唱。教育によって知識や技能（人的資本）を蓄積すれば、労働生産性が向上し、将来の所得が増加すると説明する。現代の教育政策の根幹をなす考え方。'
+            },
+            'meritocracy': {
+                title: 'メリトクラシー (能力主義)',
+                desc: '出自や身分ではなく、個人の「能力」と「業績（努力の成果）」に基づいて地位や報酬を配分するシステム。公平に見えるが、マイケル・サンデルらが指摘するように、勝者には驕りを、敗者には屈辱を与える側面もある。'
+            },
+            'reproduction': {
+                title: '社会的再生産 (Social Reproduction)',
+                desc: '親の世代の経済的・社会的地位が、教育システムを通じて子供の世代へと引き継がれる現象。学校が階層移動を促進するのではなく、既存の階層構造を固定化（再生産）しているとする批判的視点。'
+            },
+            'correspondence': {
+                title: '対応原理 (Correspondence Principle)',
+                desc: 'Bowles & Gintisの概念。学校の社会関係（教師への服従、時間管理、外発的報酬）が、資本主義的な職場の社会関係と構造的に「対応」しているとする説。学校は従順な労働者を育てるためにあると批判した。'
+            },
+            'cultural_capital': {
+                title: '文化資本 (Cultural Capital)',
+                desc: 'Pierre Bourdieuの概念。金銭（経済資本）以外の、文化的・社会的な資源のこと。言葉遣い、美的センス、芸術への関心、学歴などが含まれる。家庭環境でこれらを身につけた子供は、学校教育で有利に扱われる。'
+            },
+            'symbolic_violence': {
+                title: '象徴的暴力 (Symbolic Violence)',
+                desc: 'Bourdieuの概念。支配的な文化を「普遍的で正しいもの」として被支配者に押し付け、被支配者がそれを自然なものとして受け入れてしまう（共犯関係になる）ような、目に見えない暴力の形態。'
+            },
+            'neoliberalism': {
+                title: '新自由主義 (Neoliberalism)',
+                desc: '市場原理を重視し、公的サービスの民営化や規制緩和を進める政治・経済思想。教育においては、学校選択制の導入や、競争による質の向上を目指す改革として現れる。'
+            },
+            'school_choice': {
+                title: '学校選択制 (School Choice)',
+                desc: '居住地によって自動的に決まる学区制を廃止・緩和し、親や生徒が学校を選べるようにする制度。バウチャー制度やチャータースクールなどが含まれる。競争による活性化を狙うが、格差拡大の懸念もある。'
+            },
+            'info_asymmetry': {
+                title: '情報の非対称性 (Information Asymmetry)',
+                desc: '取引主体間で持っている情報量に格差がある状態。教育市場では、高学歴・高所得の親ほど「良い学校」の複雑な情報を入手・解読できるため、選択制が有利に働く傾向がある。'
+            },
+            'segregation': {
+                title: '分離・隔離 (Segregation)',
+                desc: '人種、民族、経済的階層によって居住区や学校が分かれること。学校選択制の結果、似た背景を持つ生徒同士が特定の学校に固まる「再隔離（Resegregation）」が進む現象が指摘されている。'
+            },
+            'standardized_test': {
+                title: '標準化テスト',
+                desc: '実施、採点、解釈が統一的な基準で行われるテスト（日本の共通テストや米国のSATなど）。客観的な能力測定を目指すが、結果が家庭の社会経済的地位（SES）と強く相関するため、公平性を巡る議論が絶えない。'
+            },
+            'ses': {
+                title: '社会経済的地位 (SES)',
+                desc: 'Socio-Economic Statusの略。親の所得、学歴、職業威信などを総合した指標。学力調査において、子供の成績を予測する最も強力な要因の一つとされる。'
+            },
+            'stereotype_threat': {
+                title: 'ステレオタイプ脅威',
+                desc: '「自分の所属する集団（人種、性別など）は能力が低い」というネガティブなステレオタイプを意識することで、心理的負担がかかり、実際のパフォーマンスが低下してしまう現象。'
+            },
+            'spatial_eco': {
+                title: '空間計量経済学',
+                desc: '地理的な位置関係や空間的な相互作用を考慮に入れた計量経済学の手法。教育分野では、居住地域の不利さ（Neighborhood disadvantage）を統計的に補正して、学生の潜在能力を評価するために応用されている。'
+            },
+            'decolonization': {
+                title: '脱植民地化 (Decolonization)',
+                desc: '単に植民地支配からの政治的独立だけでなく、精神的・文化的な支配からの脱却を目指す運動。大学においては、西洋中心的なカリキュラムや認識論を見直し、周縁化されてきた知を復権させることを指す。'
+            },
+            'eurocentrism': {
+                title: '西洋中心主義 (Eurocentrism)',
+                desc: 'ヨーロッパ（および北米）の歴史、文化、価値観を普遍的な基準とみなし、非西洋社会を「遅れた」「未開な」ものとして評価する態度。'
+            },
+            'abolitionist': {
+                title: 'アボリショニスト・ティーチング',
+                desc: 'Bettina Loveらが提唱。奴隷制廃止論（Abolitionism）の系譜に連なり、抑圧的なシステム内での成功を目指すのではなく、システムそのものの廃絶と「黒人の喜び・自由」を中心に据えた教育実践。'
+            },
+            'critical_pedagogy': {
+                title: '批判的教育学 (Critical Pedagogy)',
+                desc: 'パウロ・フレイレの影響を受け、教育を政治的な行為と捉える立場。教育を通じて、学習者が社会の抑圧構造に気づき（意識化）、変革の主体となることを目指す。'
+            },
+            'paternalism': {
+                title: 'パターナリズム (温情主義)',
+                desc: '強い立場にある者が、弱い立場にある者の利益のためだとして、本人の意思を問わずに干渉・管理すること。「未熟な君たちを導いてやる」という教師の態度は、善意であっても支配の一形態になり得る。'
+            },
+            'dummy': {
+                title: '用語解説の例',
+                desc: 'このように、重要な用語には解説が表示される。本文を読みながら、分からない言葉があればすぐにクリックして確認すること。'
+            }
+        };
+
+        // Glossary Logic
+        function openGlossary(termKey) {
+            const drawer = document.getElementById('glossary-drawer');
+            const content = document.getElementById('glossary-content');
+            const data = glossaryData[termKey];
+
+            if (data) {
+                content.innerHTML = `
+                    <h4 class="text-xl font-bold text-blue-800 mb-4">${data.title}</h4>
+                    <p class="text-gray-700 leading-7">${data.desc}</p>
+                `;
+                drawer.classList.remove('translate-x-full'); // Slide in
+            }
+        }
+
+        function closeGlossary() {
+            document.getElementById('glossary-drawer').classList.add('translate-x-full');
+        }
+        
+        // Init
+        showPage('home');
+    </script>
+</body>
+</html>
