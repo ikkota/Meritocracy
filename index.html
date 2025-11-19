@@ -37,12 +37,12 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .hook-box { background-color: #fff; border-left: 6px solid #8B2635; padding: 1.5rem; margin-bottom: 2.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
         
-        /* Login Overlay */
-        #login-overlay { position: fixed; inset: 0; background: #1A202C; z-index: 100; display: flex; align-items: center; justify-content: center; flex-direction: column; color: white; }
-        .hidden { display: none !important; }
+        /* Auth State Styles */
+        .auth-only { display: none; } /* JSで制御 */
+        .guest-only { display: block; }
         
-        /* Toast Notification */
-        #toast { visibility: hidden; min-width: 250px; background-color: #333; color: #fff; text-align: center; border-radius: 4px; padding: 16px; position: fixed; z-index: 1; left: 50%; bottom: 30px; transform: translateX(-50%); font-size: 14px; }
+        /* Toast */
+        #toast { visibility: hidden; min-width: 250px; background-color: #333; color: #fff; text-align: center; border-radius: 4px; padding: 16px; position: fixed; z-index: 50; left: 50%; bottom: 30px; transform: translateX(-50%); font-size: 14px; }
         #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
         @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
         @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
@@ -50,39 +50,42 @@
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans h-screen flex overflow-hidden">
 
-    <div id="login-overlay">
-        <div class="text-center max-w-md px-6">
-            <p class="text-oberlin-red font-bold tracking-widest uppercase text-sm mb-4">J.F. Oberlin University</p>
-            <h1 class="text-4xl font-serif font-bold mb-6">教育社会学特講 LMS</h1>
-            <p class="mb-8 text-gray-400 text-sm">受講記録を保存するため、Googleアカウントでの認証が必要です。</p>
-            <button id="google-login-btn" class="bg-white text-gray-800 px-8 py-3 rounded-full font-bold hover:bg-gray-200 transition flex items-center justify-center w-full">
-                <i class="fab fa-google mr-3 text-oberlin-red"></i> Googleアカウントでログイン
-            </button>
-        </div>
-    </div>
-
     <div id="toast">Saved successfully</div>
 
     <aside class="w-64 bg-oberlin-dark text-white flex-shrink-0 flex flex-col shadow-xl z-10">
         <div class="p-6 border-b border-gray-700">
             <h1 class="font-serif font-bold text-xl tracking-wider">Sociology of<br>Education</h1>
-            <div class="mt-4 flex items-center">
-                <img id="user-avatar" src="" class="w-8 h-8 rounded-full mr-3 bg-gray-600 hidden">
-                <span id="user-name" class="text-xs text-gray-300 truncate">Guest</span>
+            <p class="text-xs text-gray-400 mt-2">2025 Spring Module</p>
+            
+            <div class="mt-6 p-3 bg-gray-800 rounded-lg flex items-center transition">
+                <img id="sidebar-avatar" src="" class="w-8 h-8 rounded-full mr-3 bg-gray-600 hidden">
+                <div class="overflow-hidden">
+                    <p id="sidebar-username" class="text-sm font-bold text-gray-200 truncate">Guest User</p>
+                    <p id="sidebar-status" class="text-xs text-gray-500">Reading Mode</p>
+                </div>
             </div>
         </div>
+
         <nav class="flex-1 overflow-y-auto py-4">
             <ul class="space-y-1">
                 <li><button onclick="navTo('home')" class="nav-btn w-full text-left px-6 py-3 hover:bg-gray-700 transition border-l-4 border-transparent" id="btn-home"><i class="fas fa-home w-6"></i> Top / Introduction</button></li>
                 <li class="pt-4 pb-2 px-6 text-xs font-bold text-gray-500 uppercase">Syllabus & Tasks</li>
-                <li><button onclick="navTo('week1')" class="nav-btn w-full text-left px-6 py-3 hover:bg-gray-700 transition border-l-4 border-transparent" id="btn-week1"><i class="fas fa-layer-group w-6"></i> Week 1: Theory <i class="fas fa-check text-green-500 ml-2 hidden" id="status-week1"></i></button></li>
-                <li><button onclick="navTo('week2')" class="nav-btn w-full text-left px-6 py-3 hover:bg-gray-700 transition border-l-4 border-transparent" id="btn-week2"><i class="fas fa-chart-pie w-6"></i> Week 2: Application <i class="fas fa-check text-green-500 ml-2 hidden" id="status-week2"></i></button></li>
-                <li><button onclick="navTo('week3')" class="nav-btn w-full text-left px-6 py-3 hover:bg-gray-700 transition border-l-4 border-transparent" id="btn-week3"><i class="fas fa-fist-raised w-6"></i> Week 3: Critique <i class="fas fa-check text-green-500 ml-2 hidden" id="status-week3"></i></button></li>
+                <li><button onclick="navTo('week1')" class="nav-btn w-full text-left px-6 py-3 hover:bg-gray-700 transition border-l-4 border-transparent" id="btn-week1"><i class="fas fa-layer-group w-6"></i> Week 1: Theory <i class="fas fa-check text-green-500 ml-2 hidden" id="icon-done-week1"></i></button></li>
+                <li><button onclick="navTo('week2')" class="nav-btn w-full text-left px-6 py-3 hover:bg-gray-700 transition border-l-4 border-transparent" id="btn-week2"><i class="fas fa-chart-pie w-6"></i> Week 2: Application <i class="fas fa-check text-green-500 ml-2 hidden" id="icon-done-week2"></i></button></li>
+                <li><button onclick="navTo('week3')" class="nav-btn w-full text-left px-6 py-3 hover:bg-gray-700 transition border-l-4 border-transparent" id="btn-week3"><i class="fas fa-fist-raised w-6"></i> Week 3: Critique <i class="fas fa-check text-green-500 ml-2 hidden" id="icon-done-week3"></i></button></li>
                 <li class="pt-4 pb-2 px-6 text-xs font-bold text-gray-500 uppercase">Community</li>
                 <li><button onclick="navTo('forum')" class="nav-btn w-full text-left px-6 py-3 hover:bg-gray-700 transition border-l-4 border-transparent" id="btn-forum"><i class="fas fa-comments w-6"></i> Discussion Board</button></li>
             </ul>
         </nav>
-        <button id="logout-btn" class="p-4 text-xs text-gray-500 hover:text-white text-center border-t border-gray-700">ログアウト</button>
+
+        <div class="p-4 border-t border-gray-700">
+            <button id="sidebar-login-btn" class="guest-only w-full bg-oberlin-red hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition text-xs">
+                <i class="fab fa-google mr-2"></i> ログインして受講
+            </button>
+            <button id="sidebar-logout-btn" class="auth-only w-full bg-gray-700 hover:bg-gray-600 text-gray-300 font-bold py-2 px-4 rounded transition text-xs">
+                ログアウト
+            </button>
+        </div>
     </aside>
 
     <main class="flex-1 overflow-y-auto relative scroll-smooth bg-white">
@@ -94,22 +97,29 @@
                     <h2 class="text-4xl font-serif font-bold mt-4 mb-6 text-gray-900">教育格差、メリトクラシー、<br>そして社会正義</h2>
                     <p class="text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto">
                         本講義は、現代社会の亀裂である「教育格差」を、対立する理論的視座から解剖する集中講義である。<br>
-                        各週の最後に「課題」がある。必ず提出すること。
+                        なぜ「努力」は報われないのか？ 学校は誰のためにあるのか？<br>
+                        3週間を通じて、その構造的要因を探求する。
                     </p>
                 </div>
-                <div class="grid md:grid-cols-3 gap-6">
+                <div class="grid md:grid-cols-3 gap-6 mb-12">
                     <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 cursor-pointer hover:shadow-md transition" onclick="navTo('week1')">
-                        <h3 class="font-bold text-lg text-blue-800 mb-2">Week 1</h3>
-                        <p class="text-sm text-gray-600">人的資本論 vs 再生産論。</p>
+                        <h3 class="font-bold text-lg text-blue-800 mb-2">Week 1: Theory</h3>
+                        <p class="text-sm text-gray-600">人的資本論 vs 再生産論。メリトクラシーの光と影を学ぶ。</p>
                     </div>
                     <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 cursor-pointer hover:shadow-md transition" onclick="navTo('week2')">
-                        <h3 class="font-bold text-lg text-yellow-700 mb-2">Week 2</h3>
-                        <p class="text-sm text-gray-600">市場原理とテストの政治学。</p>
+                        <h3 class="font-bold text-lg text-yellow-700 mb-2">Week 2: Application</h3>
+                        <p class="text-sm text-gray-600">市場原理とテストの政治学。具体的な政策の功罪。</p>
                     </div>
                     <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 cursor-pointer hover:shadow-md transition" onclick="navTo('week3')">
-                        <h3 class="font-bold text-lg text-purple-800 mb-2">Week 3</h3>
-                        <p class="text-sm text-gray-600">脱植民地化と教育の未来。</p>
+                        <h3 class="font-bold text-lg text-purple-800 mb-2">Week 3: Critique</h3>
+                        <p class="text-sm text-gray-600">改革から再構築へ。脱植民地化と教育の未来。</p>
                     </div>
+                </div>
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                    <p class="text-sm text-blue-900">
+                        <strong><i class="fas fa-info-circle mr-1"></i> ガイダンス:</strong>
+                        シラバスの閲覧は自由ですが、<strong>課題の提出および掲示板への書き込みにはGoogleアカウントでのログインが必要</strong>です。左メニューまたは各課題セクションからログインしてください。
+                    </p>
                 </div>
             </div>
         </div>
@@ -118,7 +128,7 @@
             <header class="bg-blue-50 px-8 py-12 border-b border-blue-100">
                 <div class="max-w-4xl mx-auto">
                     <span class="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full">Week 1</span>
-                    <h2 class="text-3xl font-serif font-bold mt-4 text-gray-900">メリトクラシーの光と影</h2>
+                    <h2 class="text-3xl font-serif font-bold mt-4 text-gray-900">理論的枠組みと歴史的背景<br>—— メリトクラシーの光と影</h2>
                 </div>
             </header>
             <div class="max-w-4xl mx-auto px-8 py-12">
@@ -127,21 +137,61 @@
                     <p class="text-xl font-serif font-medium text-gray-800">学業の成功は、本当に「個人の努力」の賜物なのか？</p>
                 </div>
 
-                <section class="mb-12">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4"><span class="text-blue-500 mr-2">1.1</span> 人的資本理論と再生産</h3>
+                <section class="mb-16">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center"><span class="text-blue-500 mr-3">1.1</span> 機能主義と人的資本理論</h3>
                     <p class="text-gray-700 leading-8 mb-4">
-                        <span class="term-link" onclick="openGlossary('hct')">人的資本理論</span>は教育を投資と捉えるが、ブルデューは<span class="term-link" onclick="openGlossary('cultural_capital')">文化資本</span>の概念を用い、学校が上流階級の文化を評価基準とすることで、格差を<span class="term-link" onclick="openGlossary('reproduction')">再生産</span>していると批判した。
+                        まず、現代の教育政策（世界銀行やOECDの提言を含む）の根幹を成す理論を検討する。これは<span class="term-link" onclick="openGlossary('hct')">人的資本理論 (Human Capital Theory)</span>と呼ばれ、シカゴ学派の経済学者ゲーリー・ベッカーらによって体系化された。
+                    </p>
+                    <p class="text-gray-700 leading-8 mb-4">
+                        この理論において、教育は「消費」ではなく「投資」である。個人が教育に時間と費用を投じることで、知識や技能といった「人的資本」が蓄積され、それが労働生産性を高め、結果として高い賃金をもたらすと説明する。この視点では、<span class="term-link" onclick="openGlossary('meritocracy')">メリトクラシー (能力主義)</span>は正しく機能しており、格差は「投資の差異」や「個人の能力差」として正当化される。
+                    </p>
+                </section>
+
+                <section class="mb-16">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center"><span class="text-red-500 mr-3">1.2</span> 紛争理論と社会的再生産</h3>
+                    <p class="text-gray-700 leading-8 mb-4">
+                        HCTが描く「バラ色の教育観」に対し、社会学は鋭い批判的視座を提供する。<span class="term-link" onclick="openGlossary('reproduction')">社会的再生産 (Social Reproduction)</span>の理論家たちは、教育がいかにして既存の不平等を永続させているかを解明する。
+                    </p>
+                    <div class="grid md:grid-cols-2 gap-6 mt-8">
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h4 class="font-bold text-lg mb-3">A. 構造的対応原理</h4>
+                            <p class="text-sm text-gray-600 mb-3">
+                                Bowles & Gintisは、学校の社会関係（教師への服従、チャイムによる時間管理）は、工場の社会関係と構造的に対応していると論じた。これを<span class="term-link" onclick="openGlossary('correspondence')">対応原理 (Correspondence Principle)</span>と呼ぶ。学校は「賢い子」ではなく「資本主義に適応する従順な労働者」を育てているという批判である。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h4 class="font-bold text-lg mb-3">B. 文化資本と象徴的暴力</h4>
+                            <p class="text-sm text-gray-600 mb-3">
+                                Pierre Bourdieuは、経済的な富だけでなく、<span class="term-link" onclick="openGlossary('cultural_capital')">文化資本 (Cultural Capital)</span>の概念を提起した。家庭で身につけた言葉遣い、礼儀作法、美的センスなどが、学校では「才能」として承認される。
+                            </p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 leading-8 mt-6">
+                        労働者階級の子どもたちは、自身の文化を「無価値」とされ、学業不振を「自己責任」として内面化させられる。これをブルデューは<span class="term-link" onclick="openGlossary('symbolic_violence')">象徴的暴力 (Symbolic Violence)</span>と呼んだ。
                     </p>
                 </section>
 
                 <div class="bg-blue-50 p-6 rounded-xl border border-blue-200 mt-12">
-                    <h4 class="font-bold text-blue-900 mb-2"><i class="fas fa-pen-nib mr-2"></i>Week 1 課題: 理論の適用</h4>
+                    <div class="flex justify-between items-center mb-4">
+                        <h4 class="font-bold text-blue-900"><i class="fas fa-pen-nib mr-2"></i>Week 1 課題: 理論の適用</h4>
+                        <span class="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded">必須</span>
+                    </div>
                     <p class="text-sm text-gray-700 mb-4">
                         あなた自身の大学受験やこれまでの学習経験を振り返り、「人的資本理論」と「再生産理論（文化資本など）」のどちらが自分の経験をよりよく説明できるか考察しなさい。（200字〜400字程度）
                     </p>
-                    <textarea id="assign-week1" class="w-full border border-gray-300 rounded p-3 text-sm h-32 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="ここに回答を入力..."></textarea>
-                    <div class="mt-3 text-right">
-                        <button onclick="submitAssignment('week1')" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 text-sm font-bold transition">課題を提出する</button>
+                    
+                    <div class="auth-only">
+                        <textarea id="assign-week1" class="w-full border border-gray-300 rounded p-3 text-sm h-32 focus:ring-2 focus:ring-blue-500 focus:outline-none mb-3" placeholder="ここに回答を入力..."></textarea>
+                        <div class="text-right">
+                            <button onclick="submitAssignment('week1')" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 text-sm font-bold transition shadow">課題を提出する</button>
+                        </div>
+                    </div>
+                    
+                    <div class="guest-only text-center py-6 bg-white/50 rounded border border-dashed border-gray-400">
+                        <p class="text-gray-500 mb-3 text-sm">課題を提出するにはログインが必要です。</p>
+                        <button onclick="triggerLogin()" class="bg-oberlin-red text-white px-6 py-2 rounded hover:bg-red-700 text-sm font-bold transition">
+                            <i class="fab fa-google mr-2"></i> ログインして課題に取り組む
+                        </button>
                     </div>
                 </div>
             </div>
@@ -151,7 +201,7 @@
             <header class="bg-yellow-50 px-8 py-12 border-b border-yellow-100">
                 <div class="max-w-4xl mx-auto">
                     <span class="bg-yellow-600 text-white text-xs font-bold px-3 py-1 rounded-full">Week 2</span>
-                    <h2 class="text-3xl font-serif font-bold mt-4 text-gray-900">市場とテストの政治学</h2>
+                    <h2 class="text-3xl font-serif font-bold mt-4 text-gray-900">具体的な事例研究・応用<br>—— 市場とテストの政治学</h2>
                 </div>
             </header>
             <div class="max-w-4xl mx-auto px-8 py-12">
@@ -160,21 +210,50 @@
                     <p class="text-xl font-serif font-medium text-gray-800">「選択の自由」や「公正なテスト」は、本当に格差を是正するのか？</p>
                 </div>
 
-                <section class="mb-12">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">選択と排除のメカニズム</h3>
+                <section class="mb-16">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">2.1 学校選択制とチャータースクールのパラドックス</h3>
                     <p class="text-gray-700 leading-8 mb-4">
-                        <span class="term-link" onclick="openGlossary('school_choice')">学校選択制</span>は競争を促すが、<span class="term-link" onclick="openGlossary('info_asymmetry')">情報の非対称性</span>により、結果として<span class="term-link" onclick="openGlossary('segregation')">分離・隔離</span>が進む。また、<span class="term-link" onclick="openGlossary('standardized_test')">標準化テスト</span>には、<span class="term-link" onclick="openGlossary('stereotype_threat')">ステレオタイプ脅威</span>などのバイアスが潜む。
+                        <span class="term-link" onclick="openGlossary('neoliberalism')">新自由主義</span>的な教育改革の中核をなすのが「学校選択（School Choice）」である。これは、公立学校の独占を打破し、親に学校を選ぶ権利を与えることで、市場競争を通じて教育の質を向上させようとする試みである。
+                    </p>
+                    <p class="text-gray-700 leading-8 mb-4">
+                        しかし、Frankenbergら (2011) の調査は、<span class="term-link" onclick="openGlossary('school_choice')">学校選択制</span>が結果として人種的・階層的な分離を促進している事実を明らかにした。高学歴な親ほど良質な情報を入手できるという<span class="term-link" onclick="openGlossary('info_asymmetry')">情報の非対称性</span>が存在するため、選択の結果、似た者同士が集まる<span class="term-link" onclick="openGlossary('segregation')">再隔離 (Resegregation)</span>が進行するのである。
                     </p>
                 </section>
 
+                <section class="mb-16">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">2.2 標準化テスト：公平な「ものさし」か？</h3>
+                    <p class="text-gray-700 leading-8 mb-4">
+                        SATなどの<span class="term-link" onclick="openGlossary('standardized_test')">標準化テスト</span>は、かつて家柄主義を打破するために導入された。しかし現代では、テストスコアは<span class="term-link" onclick="openGlossary('ses')">社会経済的地位 (SES)</span>と強く相関している。
+                    </p>
+                    <p class="text-gray-700 leading-8 mb-4">
+                        さらに、マイノリティの学生が「自分の集団は能力が低い」というステレオタイプを意識することでパフォーマンスが低下する<span class="term-link" onclick="openGlossary('stereotype_threat')">ステレオタイプ脅威</span>も深刻な問題である。
+                    </p>
+                    <div class="bg-blue-50 p-4 rounded text-sm text-blue-900 border-l-4 border-blue-500">
+                        <strong>New Perspective:</strong> 近年では、<span class="term-link" onclick="openGlossary('spatial_eco')">空間計量経済学</span>の手法を用い、居住地域の不利さを考慮してスコアを補正し、「埋もれた才能」を発掘しようとする新たな試みも始まっている。
+                    </div>
+                </section>
+
                 <div class="bg-yellow-50 p-6 rounded-xl border border-yellow-200 mt-12">
-                    <h4 class="font-bold text-yellow-900 mb-2"><i class="fas fa-pen-nib mr-2"></i>Week 2 課題: 政策論争</h4>
+                    <div class="flex justify-between items-center mb-4">
+                        <h4 class="font-bold text-yellow-900"><i class="fas fa-pen-nib mr-2"></i>Week 2 課題: 政策論争</h4>
+                        <span class="text-xs bg-yellow-200 text-yellow-800 px-2 py-1 rounded">必須</span>
+                    </div>
                     <p class="text-sm text-gray-700 mb-4">
                         日本においても「学校選択制」の導入や拡大を求める声がある。本講義で学んだ「分離・隔離（Segregation）」のリスクを踏まえ、あなたは選択制の拡大に賛成か反対か、理由とともに述べよ。
                     </p>
-                    <textarea id="assign-week2" class="w-full border border-gray-300 rounded p-3 text-sm h-32 focus:ring-2 focus:ring-yellow-500 focus:outline-none" placeholder="ここに回答を入力..."></textarea>
-                    <div class="mt-3 text-right">
-                        <button onclick="submitAssignment('week2')" class="bg-yellow-600 text-white px-6 py-2 rounded hover:bg-yellow-700 text-sm font-bold transition">課題を提出する</button>
+                    
+                    <div class="auth-only">
+                        <textarea id="assign-week2" class="w-full border border-gray-300 rounded p-3 text-sm h-32 focus:ring-2 focus:ring-yellow-500 focus:outline-none mb-3" placeholder="ここに回答を入力..."></textarea>
+                        <div class="text-right">
+                            <button onclick="submitAssignment('week2')" class="bg-yellow-600 text-white px-6 py-2 rounded hover:bg-yellow-700 text-sm font-bold transition shadow">課題を提出する</button>
+                        </div>
+                    </div>
+
+                    <div class="guest-only text-center py-6 bg-white/50 rounded border border-dashed border-gray-400">
+                        <p class="text-gray-500 mb-3 text-sm">課題を提出するにはログインが必要です。</p>
+                        <button onclick="triggerLogin()" class="bg-oberlin-red text-white px-6 py-2 rounded hover:bg-red-700 text-sm font-bold transition">
+                            <i class="fab fa-google mr-2"></i> ログインして課題に取り組む
+                        </button>
                     </div>
                 </div>
             </div>
@@ -184,7 +263,7 @@
             <header class="bg-purple-50 px-8 py-12 border-b border-purple-100">
                 <div class="max-w-4xl mx-auto">
                     <span class="bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full">Week 3</span>
-                    <h2 class="text-3xl font-serif font-bold mt-4 text-gray-900">改革を超えて</h2>
+                    <h2 class="text-3xl font-serif font-bold mt-4 text-gray-900">批判的検討・倫理・未来展望<br>—— 改革を超えて</h2>
                 </div>
             </header>
             <div class="max-w-4xl mx-auto px-8 py-12">
@@ -193,21 +272,52 @@
                     <p class="text-xl font-serif font-medium text-gray-800">君たちが学ぶ「正解」は、誰によって決められたのか？</p>
                 </div>
 
+                <p class="text-lg text-gray-700 mb-10">
+                    最終週では、視点を「既存のシステムをどう改善するか（Reform）」から、「システムそのものをどう捉え直すか（Reimagine）」へと移す。
+                </p>
+
                 <section class="mb-12">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">脱植民地化と未来</h3>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">3.1 知の脱植民地化とカリキュラム</h3>
                     <p class="text-gray-700 leading-8 mb-4">
-                        <span class="term-link" onclick="openGlossary('decolonization')">脱植民地化</span>は知の権力構造を問う。<span class="term-link" onclick="openGlossary('abolitionist')">アボリショニスト・ティーチング</span>は、サバイバルではなく自由を求める。
+                        「カリキュラムの<span class="term-link" onclick="openGlossary('decolonization')">脱植民地化 (Decolonization)</span>」運動は、単に非西洋の著者をシラバスに追加することではない。それは、大学や学校で教えられている「知識」そのものが、<span class="term-link" onclick="openGlossary('eurocentrism')">西洋中心主義</span>的な権力構造によって形成され、特定の視点を普遍的なものとして特権化してきた歴史を問い直すことである。
+                    </p>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">3.2 アボリショニスト・ティーチング</h3>
+                    <p class="text-gray-700 leading-8 mb-4">
+                        Bettina Loveが提唱する<span class="term-link" onclick="openGlossary('abolitionist')">アボリショニスト・ティーチング</span>は、現代の批判的教育理論の最前線に位置する。彼女は、教育の目的を差別的なシステムの中での「サバイバル（生存）」から、システムからの「自由（Freedom）」へと転換することを迫る。
+                    </p>
+                </section>
+
+                <section class="bg-gray-100 p-6 rounded-xl border border-gray-200 mb-12">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Critical Reflection: 批判的教育学への自己批判</h3>
+                    <p class="text-gray-700 mb-4">
+                        しかし、こうした<span class="term-link" onclick="openGlossary('critical_pedagogy')">批判的教育学</span>自体も、教師が「無知な学生を啓蒙してやる」という<span class="term-link" onclick="openGlossary('paternalism')">パターナリズム (温情主義)</span>に陥る危険性を孕んでいる。理想論に陶酔せず、いかにして実践的な変革の回路を開くかが問われている。
                     </p>
                 </section>
 
                 <div class="bg-purple-50 p-6 rounded-xl border border-purple-200 mt-12">
-                    <h4 class="font-bold text-purple-900 mb-2"><i class="fas fa-pen-nib mr-2"></i>Week 3 課題: カリキュラムの再構想</h4>
+                    <div class="flex justify-between items-center mb-4">
+                        <h4 class="font-bold text-purple-900"><i class="fas fa-pen-nib mr-2"></i>Week 3 課題: カリキュラムの再構想</h4>
+                        <span class="text-xs bg-purple-200 text-purple-800 px-2 py-1 rounded">必須</span>
+                    </div>
                     <p class="text-sm text-gray-700 mb-4">
                         もしあなたが大学のカリキュラムを自由に編成できるとしたら、「脱植民地化」の視点を取り入れて、どのような新しい授業科目を作りますか？具体的な授業名と内容を提案してください。
                     </p>
-                    <textarea id="assign-week3" class="w-full border border-gray-300 rounded p-3 text-sm h-32 focus:ring-2 focus:ring-purple-500 focus:outline-none" placeholder="ここに回答を入力..."></textarea>
-                    <div class="mt-3 text-right">
-                        <button onclick="submitAssignment('week3')" class="bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-700 text-sm font-bold transition">課題を提出する</button>
+
+                    <div class="auth-only">
+                        <textarea id="assign-week3" class="w-full border border-gray-300 rounded p-3 text-sm h-32 focus:ring-2 focus:ring-purple-500 focus:outline-none mb-3" placeholder="ここに回答を入力..."></textarea>
+                        <div class="text-right">
+                            <button onclick="submitAssignment('week3')" class="bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-700 text-sm font-bold transition shadow">課題を提出する</button>
+                        </div>
+                    </div>
+
+                    <div class="guest-only text-center py-6 bg-white/50 rounded border border-dashed border-gray-400">
+                        <p class="text-gray-500 mb-3 text-sm">課題を提出するにはログインが必要です。</p>
+                        <button onclick="triggerLogin()" class="bg-oberlin-red text-white px-6 py-2 rounded hover:bg-red-700 text-sm font-bold transition">
+                            <i class="fab fa-google mr-2"></i> ログインして課題に取り組む
+                        </button>
                     </div>
                 </div>
             </div>
@@ -223,10 +333,19 @@
             </header>
             <div class="max-w-4xl mx-auto px-8 py-12">
                 <div class="bg-white p-4 rounded shadow-sm border border-gray-200 mb-8">
-                    <textarea id="forum-input" class="w-full border border-gray-300 p-3 rounded mb-2 focus:outline-none focus:border-green-500" rows="3" placeholder="意見を投稿する..."></textarea>
-                    <div class="text-right">
-                        <button onclick="postComment()" class="bg-green-600 text-white px-6 py-2 rounded font-bold hover:bg-green-700 transition">投稿</button>
+                    
+                    <div class="auth-only">
+                        <textarea id="forum-input" class="w-full border border-gray-300 p-3 rounded mb-2 focus:outline-none focus:border-green-500" rows="3" placeholder="意見を投稿する..."></textarea>
+                        <div class="text-right">
+                            <button onclick="postComment()" class="bg-green-600 text-white px-6 py-2 rounded font-bold hover:bg-green-700 transition">投稿</button>
+                        </div>
                     </div>
+
+                    <div class="guest-only text-center py-4 bg-gray-50 rounded">
+                        <p class="text-gray-500 text-sm mb-2">ディスカッションに参加するにはログインしてください。</p>
+                        <button onclick="triggerLogin()" class="text-blue-600 underline text-sm">Googleアカウントでログイン</button>
+                    </div>
+
                 </div>
                 <div id="posts-container" class="space-y-4">
                     <p class="text-center text-gray-400">読み込み中...</p>
@@ -250,7 +369,8 @@
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, addDoc, collection, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // --- Config ---
+        // --- ★ここにCONFIGを貼り付け★ ---
+        // あなたが取得したFirebaseのConfig情報に書き換えてください
         const firebaseConfig = {
             apiKey: "AIzaSyCg9DzLOfhpraxj7l5Ecsx99NGFdG5YcTg",
             authDomain: "meritocracy-ceae7.firebaseapp.com",
@@ -260,67 +380,119 @@
             appId: "1:130432308656:web:14bcc135d9f63e05107275",
             measurementId: "G-HFWTB2CMN2"
         };
+        // ------------------------------
 
-        // --- Init ---
+        // Init Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
         let currentUser = null;
 
-        // Auth Logic
-        const loginBtn = document.getElementById('google-login-btn');
-        const logoutBtn = document.getElementById('logout-btn');
-        const loginOverlay = document.getElementById('login-overlay');
-        const avatar = document.getElementById('user-avatar');
-        const username = document.getElementById('user-name');
+        // Auth UI Logic
+        const sidebarLoginBtn = document.getElementById('sidebar-login-btn');
+        const sidebarLogoutBtn = document.getElementById('sidebar-logout-btn');
+        const sidebarAvatar = document.getElementById('sidebar-avatar');
+        const sidebarUsername = document.getElementById('sidebar-username');
+        const sidebarStatus = document.getElementById('sidebar-status');
 
-        loginBtn.addEventListener('click', () => {
+        // Login Trigger
+        window.triggerLogin = () => {
             const provider = new GoogleAuthProvider();
             signInWithPopup(auth, provider).catch(e => alert("Login Failed: " + e.message));
-        });
+        };
 
-        logoutBtn.addEventListener('click', () => signOut(auth));
+        if(sidebarLoginBtn) sidebarLoginBtn.addEventListener('click', window.triggerLogin);
+        if(sidebarLogoutBtn) sidebarLogoutBtn.addEventListener('click', () => signOut(auth));
 
+        // Auth State Observer
         onAuthStateChanged(auth, async (user) => {
             if (user) {
+                // LOGGED IN
                 currentUser = user;
-                loginOverlay.classList.add('hidden');
-                avatar.src = user.photoURL;
-                avatar.classList.remove('hidden');
-                username.textContent = user.displayName;
+                
+                // Update Sidebar
+                sidebarAvatar.src = user.photoURL;
+                sidebarAvatar.classList.remove('hidden');
+                sidebarUsername.textContent = user.displayName;
+                sidebarStatus.textContent = "Student (Active)";
+                sidebarStatus.classList.add('text-green-400');
+                
+                // Show Auth Elements, Hide Guest Elements
+                document.querySelectorAll('.auth-only').forEach(el => el.style.display = 'block');
+                document.querySelectorAll('.guest-only').forEach(el => el.style.display = 'none');
                 
                 // Load Data
                 loadUserAssignments(user.uid);
-                loadForum();
+                
             } else {
-                loginOverlay.classList.remove('hidden');
+                // LOGGED OUT
                 currentUser = null;
+                
+                // Update Sidebar
+                sidebarAvatar.classList.add('hidden');
+                sidebarUsername.textContent = "Guest User";
+                sidebarStatus.textContent = "Reading Mode";
+                sidebarStatus.classList.remove('text-green-400');
+                
+                // Hide Auth Elements, Show Guest Elements
+                document.querySelectorAll('.auth-only').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.guest-only').forEach(el => el.style.display = 'block');
             }
         });
 
-        // UI Functions (Global scope)
-        window.navTo = (pageId) => {
-            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            document.querySelectorAll('.nav-btn').forEach(el => {
-                el.classList.remove('bg-gray-700', 'border-white');
-                el.classList.add('border-transparent');
-            });
-            const btn = document.getElementById('btn-' + pageId);
-            if(btn) {
-                btn.classList.remove('border-transparent');
-                btn.classList.add('bg-gray-700', 'border-white');
+        // Load User Data
+        async function loadUserAssignments(uid) {
+            const snap = await getDoc(doc(db, "users", uid));
+            if(snap.exists()) {
+                const data = snap.data();
+                ['week1', 'week2', 'week3'].forEach(week => {
+                    // Fill Textarea if submitted
+                    if(data[week + "_submission"]) {
+                        const textArea = document.getElementById('assign-' + week);
+                        if(textArea) textArea.value = data[week + "_submission"];
+                    }
+                    // Show checkmark
+                    if(data[week + "_submission"]) {
+                        const icon = document.getElementById('icon-done-' + week);
+                        if(icon) icon.classList.remove('hidden');
+                    }
+                });
             }
-        };
+        }
+        
+        // Load Forum (Realtime) - Always loads, but posting restricted by UI
+        const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+        onSnapshot(q, (snapshot) => {
+            const container = document.getElementById('posts-container');
+            container.innerHTML = "";
+            snapshot.forEach(doc => {
+                const post = doc.data();
+                let dateStr = "Now";
+                if (post.createdAt && post.createdAt.toDate) {
+                    dateStr = new Date(post.createdAt.toDate()).toLocaleString('ja-JP');
+                }
+                const html = `
+                    <div class="bg-white p-4 rounded border border-gray-200 flex gap-3 mb-3">
+                        <img src="${post.photo}" class="w-10 h-10 rounded-full">
+                        <div class="flex-1">
+                            <div class="flex justify-between items-baseline">
+                                <span class="font-bold text-sm text-gray-800">${post.name}</span>
+                                <span class="text-xs text-gray-400">${dateStr}</span>
+                            </div>
+                            <p class="text-gray-700 mt-1 text-sm leading-relaxed">${post.text}</p>
+                        </div>
+                    </div>`;
+                container.innerHTML += html;
+            });
+        });
 
-        // --- Assignment Logic ---
+        // Assignment Submit Logic
         window.submitAssignment = async (weekId) => {
             if(!currentUser) return;
             const text = document.getElementById('assign-' + weekId).value;
             if(!text.trim()) return alert("回答を入力してください。");
 
             try {
-                // Save to Firestore under users/{uid}
                 await setDoc(doc(db, "users", currentUser.uid), {
                     name: currentUser.displayName,
                     email: currentUser.email,
@@ -329,28 +501,17 @@
                 }, { merge: true });
 
                 showToast("課題を提出しました！");
-                document.getElementById('status-' + weekId).classList.remove('hidden');
+                const icon = document.getElementById('icon-done-' + weekId);
+                if(icon) icon.classList.remove('hidden');
             } catch(e) {
                 console.error(e);
-                alert("送信エラー: Firebaseコンソールのルール設定を確認してください。");
+                alert("送信エラー: " + e.message);
             }
         };
 
-        async function loadUserAssignments(uid) {
-            const snap = await getDoc(doc(db, "users", uid));
-            if(snap.exists()) {
-                const data = snap.data();
-                ['week1', 'week2', 'week3'].forEach(week => {
-                    if(data[week + "_submission"]) {
-                        document.getElementById('assign-' + week).value = data[week + "_submission"];
-                        document.getElementById('status-' + week).classList.remove('hidden');
-                    }
-                });
-            }
-        }
-
-        // --- Forum Logic ---
+        // Forum Post Logic
         window.postComment = async () => {
+            if(!currentUser) return;
             const text = document.getElementById('forum-input').value;
             if(!text.trim()) return;
             
@@ -365,51 +526,47 @@
                 document.getElementById('forum-input').value = "";
             } catch(e) {
                 console.error(e);
-                alert("投稿エラー: データベースの書き込み権限がありません。");
+                alert("投稿エラー: " + e.message);
             }
         };
 
-        function loadForum() {
-            const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
-            onSnapshot(q, (snapshot) => {
-                const container = document.getElementById('posts-container');
-                container.innerHTML = "";
-                snapshot.forEach(doc => {
-                    const post = doc.data();
-                    // 日付処理: post.createdAtがnullの場合（書き込み直後）の対策
-                    let dateStr = "Now";
-                    if (post.createdAt && post.createdAt.toDate) {
-                        dateStr = new Date(post.createdAt.toDate()).toLocaleString('ja-JP');
-                    }
-
-                    const html = `
-                        <div class="bg-white p-4 rounded border border-gray-200 flex gap-3 mb-3">
-                            <img src="${post.photo}" class="w-10 h-10 rounded-full">
-                            <div class="flex-1">
-                                <div class="flex justify-between items-baseline">
-                                    <span class="font-bold text-sm text-gray-800">${post.name}</span>
-                                    <span class="text-xs text-gray-400">${dateStr}</span>
-                                </div>
-                                <p class="text-gray-700 mt-1 text-sm leading-relaxed">${post.text}</p>
-                            </div>
-                        </div>`;
-                    container.innerHTML += html;
-                });
+        // Navigation
+        window.navTo = (pageId) => {
+            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(el => {
+                el.classList.remove('bg-gray-700', 'border-white');
+                el.classList.add('border-transparent');
             });
-        }
+            const btn = document.getElementById('btn-' + pageId);
+            if(btn) {
+                btn.classList.remove('border-transparent');
+                btn.classList.add('bg-gray-700', 'border-white');
+            }
+        };
 
-        // --- Glossary & Toast Logic ---
+        // Glossary
         const glossaryData = {
-            'hct': { title: '人的資本理論 (Human Capital Theory)', desc: '教育を「消費」ではなく「投資」として捉える経済理論。' },
-            'cultural_capital': { title: '文化資本 (Cultural Capital)', desc: 'Pierre Bourdieuの概念。家庭で身につく言葉遣い、趣味、教養など。' },
-            'reproduction': { title: '社会的再生産', desc: '教育が階層移動を促すのではなく、既存の不平等を固定化する機能。' },
-            'school_choice': { title: '学校選択制', desc: '親が公立学校を選べる制度。競争原理の導入。' },
-            'info_asymmetry': { title: '情報の非対称性', desc: '情報の持ち主によって有利不利が生まれる状態。' },
-            'segregation': { title: '分離・隔離', desc: '特定の人種や階層が特定の学校に固まること。' },
-            'standardized_test': { title: '標準化テスト', desc: '画一的な基準で行われる学力テスト。' },
-            'stereotype_threat': { title: 'ステレオタイプ脅威', desc: '偏見を意識することで能力が低下する心理現象。' },
-            'decolonization': { title: '脱植民地化', desc: '西洋中心的な知のあり方を問い直す運動。' },
-            'abolitionist': { title: 'アボリショニスト', desc: '抑圧的な構造の廃絶を目指す教育実践。' }
+            'hct': { title: '人的資本理論 (Human Capital Theory)', desc: '教育を「消費」ではなく「投資」として捉える経済理論。ゲーリー・ベッカーらが提唱。教育によって知識や技能（人的資本）を蓄積すれば、労働生産性が向上し、将来の所得が増加すると説明する。' },
+            'meritocracy': { title: 'メリトクラシー (能力主義)', desc: '出自や身分ではなく、個人の「能力」と「業績（努力の成果）」に基づいて地位や報酬を配分するシステム。公平に見えるが、勝者には驕りを、敗者には屈辱を与える側面もある。' },
+            'reproduction': { title: '社会的再生産 (Social Reproduction)', desc: '親の世代の経済的・社会的地位が、教育システムを通じて子供の世代へと引き継がれる現象。学校が階層移動を促進するのではなく、既存の階層構造を固定化（再生産）しているとする批判的視点。' },
+            'correspondence': { title: '対応原理 (Correspondence Principle)', desc: 'Bowles & Gintisの概念。学校の社会関係（教師への服従、時間管理）が、資本主義的な職場の社会関係と構造的に「対応」しているとする説。' },
+            'cultural_capital': { title: '文化資本 (Cultural Capital)', desc: 'Pierre Bourdieuの概念。金銭（経済資本）以外の、文化的・社会的な資源。家庭で身につく言葉遣い、教養、趣味などが、学校教育において有利に働く。' },
+            'symbolic_violence': { title: '象徴的暴力 (Symbolic Violence)', desc: 'Bourdieuの概念。支配的な文化を「普遍的で正しいもの」として押し付け、被支配者がそれを自然なものとして受け入れてしまう（共犯関係になる）ような、目に見えない暴力。' },
+            'neoliberalism': { title: '新自由主義 (Neoliberalism)', desc: '市場原理を重視し、公的サービスの民営化や競争原理の導入を進める思想。教育においては、学校選択制やバウチャー制度として現れる。' },
+            'school_choice': { title: '学校選択制 (School Choice)', desc: '親が公立学校を選べる制度。競争による質の向上を狙うが、情報の非対称性により階層による分離を招くリスクがある。' },
+            'info_asymmetry': { title: '情報の非対称性', desc: '高学歴・高所得の親ほど「良い学校」の情報を得やすく、複雑な手続きをこなせるため、選択制が有利に働く現象。' },
+            'segregation': { title: '分離・隔離 (Segregation)', desc: '人種、民族、経済的階層によって学校が分かれること。選択制の結果、似た背景を持つ生徒同士が固まる「再隔離」が指摘されている。' },
+            'standardized_test': { title: '標準化テスト', desc: '統一的な基準で行われる学力テスト。客観的に見えて、実は社会経済的地位（SES）の影響を強く受ける。' },
+            'ses': { title: '社会経済的地位 (SES)', desc: '親の所得、学歴、職業威信などを総合した指標。学力を予測する最強の因子。' },
+            'stereotype_threat': { title: 'ステレオタイプ脅威', desc: '「自分の集団は能力が低い」という偏見を意識することで心理的負担がかかり、実際のパフォーマンスが低下する現象。' },
+            'spatial_eco': { title: '空間計量経済学', desc: '地理的な位置関係を考慮した統計手法。テストの点数を、居住地域の不利さを差し引いて評価するために応用される。' },
+            'decolonization': { title: '脱植民地化 (Decolonization)', desc: '西洋中心的な知の体系やカリキュラムを見直し、排除されてきた視点や知識を復権させる運動。' },
+            'eurocentrism': { title: '西洋中心主義 (Eurocentrism)', desc: '西洋の価値観や歴史を普遍的な基準とみなす態度。' },
+            'abolitionist': { title: 'アボリショニスト・ティーチング', desc: 'Bettina Loveらが提唱。抑圧的なシステム内での「サバイバル」ではなく、システムそのものの廃絶と「自由」を目指す教育実践。' },
+            'critical_pedagogy': { title: '批判的教育学 (Critical Pedagogy)', desc: 'パウロ・フレイレの影響を受け、教育を通じて社会の抑圧構造に気づき、変革の主体となることを目指す教育論。' },
+            'paternalism': { title: 'パターナリズム (温情主義)', desc: '強い立場にある者が、弱い者の利益のためだとして、本人の意思を問わずに干渉・管理すること。' },
+            'dummy': { title: '用語解説', desc: 'このように用語をクリックすると解説が表示されます。' }
         };
 
         window.openGlossary = (key) => {
@@ -427,8 +584,8 @@
             t.className = "show";
             setTimeout(() => { t.className = t.className.replace("show", ""); }, 3000);
         }
-        
-        // Init View
+
+        // Init
         navTo('home');
     </script>
 </body>
